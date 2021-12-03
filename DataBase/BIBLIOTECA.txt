@@ -1,0 +1,118 @@
+--DATABASE: BIBLIOTECA
+
+CREATE DATABASE "BIBLIOTECA4"
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Portuguese_Brazil.1252'
+    LC_CTYPE = 'Portuguese_Brazil.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+
+
+
+
+--TABLES:
+
+CREATE TABLE public.autor (
+    cod_autor integer NOT NULL,
+    nome_autor character varying NOT NULL
+);
+
+
+ALTER TABLE public.autor OWNER TO postgres;
+
+
+
+CREATE TABLE public.categoria (
+    cod_categoria integer NOT NULL,
+    descricao_categoria character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.categoria OWNER TO postgres;
+
+
+
+CREATE TABLE public.editora (
+    cod_editora integer NOT NULL,
+    nome_editora character varying(200) NOT NULL,
+    cnpj_editora character varying(20)
+);
+
+
+ALTER TABLE public.editora OWNER TO postgres;
+
+
+
+CREATE TABLE public.livro (
+    cod_livro integer NOT NULL,
+    isbn integer,
+    titulo character varying(200) NOT NULL,
+    cod_editora integer,
+    cod_categoria integer,
+    ano integer
+);
+
+
+ALTER TABLE public.livro OWNER TO postgres;
+
+
+
+CREATE TABLE public.livro_autor (
+    cod_autor integer NOT NULL,
+    cod_livro integer NOT NULL
+);
+
+
+ALTER TABLE public.livro_autor OWNER TO postgres;
+
+
+
+ALTER TABLE ONLY public.autor
+    ADD CONSTRAINT "PK_AUTOR" PRIMARY KEY (cod_autor);
+
+
+ALTER TABLE ONLY public.categoria
+    ADD CONSTRAINT "PK_CATEGORIA" PRIMARY KEY (cod_categoria);
+
+
+
+
+ALTER TABLE ONLY public.editora
+    ADD CONSTRAINT "PK_EDITORA" PRIMARY KEY (cod_editora);
+
+
+
+ALTER TABLE ONLY public.livro
+    ADD CONSTRAINT "PK_LIVRO" PRIMARY KEY (cod_livro);
+
+
+
+
+ALTER TABLE ONLY public.livro_autor
+    ADD CONSTRAINT "PK_LIVRO_AUTOR" PRIMARY KEY (cod_autor, cod_livro);
+
+
+
+
+ALTER TABLE ONLY public.livro
+    ADD CONSTRAINT "FK_LIVRO_CATEGORIA" FOREIGN KEY (cod_categoria) REFERENCES public.categoria(cod_categoria);
+
+
+
+ALTER TABLE ONLY public.livro
+    ADD CONSTRAINT "FK_LIVRO_EDITORA" FOREIGN KEY (cod_editora) REFERENCES public.editora(cod_editora);
+
+
+
+
+ALTER TABLE ONLY public.livro_autor
+    ADD CONSTRAINT cod_autor FOREIGN KEY (cod_autor) REFERENCES public.autor(cod_autor);
+
+
+
+
+ALTER TABLE ONLY public.livro_autor
+    ADD CONSTRAINT cod_livro FOREIGN KEY (cod_livro) REFERENCES public.livro(cod_livro);
